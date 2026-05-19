@@ -33,26 +33,27 @@ export function WelcomePhase({
 
           <div className="relative">
             <div className="flex items-center gap-2 text-[11px] uppercase tracking-[0.32em] text-muted-foreground">
-              <Moon className="size-3.5 text-aurora" /> Tuesday evening
+              <Moon className="size-3.5" style={{ color: driverAccent }} /> Tuesday evening
             </div>
             <h1 className="mt-8 font-display text-[64px] leading-[0.95] text-foreground md:text-[78px]">
-              Welcome back,
+              {isNew ? "Hello," : "Welcome back,"}
               <br />
-              <span className="text-aurora italic">Sofia</span>.
+              <span className="italic" style={{ color: driverAccent }}>{driverName}</span>.
             </h1>
             <p className="mt-7 max-w-md text-[15px] leading-relaxed text-muted-foreground">
-              The cabin is warm and your seat is the way you like it.
-              Take your time — I'll be ready whenever you are.
+              {isNew
+                ? "The cabin is yours. I'll learn how you like to move through the world, one drive at a time."
+                : "The cabin is warm and your seat is the way you like it. Take your time — I'll be ready whenever you are."}
             </p>
           </div>
 
           <div className="relative mt-12 text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
             Not you?{" "}
             <button
-              onClick={onFirstTime}
+              onClick={onSwitchDriver}
               className="ml-1 text-foreground/80 underline-offset-4 hover:text-aurora hover:underline"
             >
-              First time in this car
+              Switch driver
             </button>
           </div>
         </motion.section>
