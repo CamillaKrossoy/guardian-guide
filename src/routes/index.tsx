@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { PhaseNav, type Phase } from "@/components/hmi/PhaseNav";
+import { WelcomePhase } from "@/components/hmi/WelcomePhase";
 import { OnboardingPhase } from "@/components/hmi/OnboardingPhase";
 import { NudgePhase } from "@/components/hmi/NudgePhase";
 import { LogicPhase } from "@/components/hmi/LogicPhase";
@@ -12,7 +13,8 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
-  const [phase, setPhase] = useState<Phase>("onboarding");
+  const [phase, setPhase] = useState<Phase>("welcome");
+  const [firstTime, setFirstTime] = useState(false);
 
   return (
     <div className="relative flex min-h-screen flex-col">
@@ -27,22 +29,33 @@ function Index() {
         <div className="flex-1">
           <AnimatePresence mode="wait">
             <motion.div
-              key={phase}
+              key={firstTime ? "onboarding" : phase}
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -8 }}
               transition={{ duration: 0.5, ease: [0.2, 0.8, 0.2, 1] }}
               className="min-h-[calc(100vh-120px)]"
             >
-              {phase === "onboarding" && <OnboardingPhase />}
-              {phase === "nudge" && <NudgePhase />}
-              {phase === "logic" && <LogicPhase />}
-              {phase === "takeover" && <TakeoverPhase />}
+              {firstTime ? (
+                <OnboardingPhase
+                  onComplete={() => {
+                    setFirstTime(false);
+                    setPhase("welcome");
+                  }}
+                />
+              ) : (
+                <>
+                  {phase === "welcome"  && <WelcomePhase onFirstTime={() => setFirstTime(true)} />}
+                  {phase === "nudge"    && <NudgePhase />}
+                  {phase === "logic"    && <LogicPhase />}
+                  {phase === "takeover" && <TakeoverPhase />}
+                </>
+              )}
             </motion.div>
           </AnimatePresence>
         </div>
 
-        <PhaseNav active={phase} onChange={setPhase} />
+        {!firstTime && <PhaseNav active={phase} onChange={setPhase} />}
       </div>
     </div>
   );
