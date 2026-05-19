@@ -4,13 +4,22 @@ import { RoadView } from "./RoadView";
 import { Moon, MapPin, Music2, Thermometer } from "lucide-react";
 
 interface WelcomePhaseProps {
-  onFirstTime?: () => void;
+  driverName?: string;
+  driverAccent?: string;
+  driverDrives?: number;
+  onSwitchDriver?: () => void;
 }
 
-export function WelcomePhase({ onFirstTime }: WelcomePhaseProps) {
+export function WelcomePhase({
+  driverName = "Sofia",
+  driverAccent = "oklch(0.82 0.10 200)",
+  driverDrives = 142,
+  onSwitchDriver,
+}: WelcomePhaseProps) {
+  const isNew = driverDrives === 0;
   return (
     <div className="flex h-full flex-col">
-      <ChromeShell phaseLabel="Continuing where we left off" rightStatus="At rest" />
+      <ChromeShell phaseLabel="Continuing where we left off" driverName={driverName} rightStatus="At rest" />
 
       <div className="mx-auto grid w-full max-w-7xl flex-1 grid-cols-1 gap-6 px-8 pb-6 lg:grid-cols-12">
         {/* Left — soft greeting */}
@@ -24,26 +33,27 @@ export function WelcomePhase({ onFirstTime }: WelcomePhaseProps) {
 
           <div className="relative">
             <div className="flex items-center gap-2 text-[11px] uppercase tracking-[0.32em] text-muted-foreground">
-              <Moon className="size-3.5 text-aurora" /> Tuesday evening
+              <Moon className="size-3.5" style={{ color: driverAccent }} /> Tuesday evening
             </div>
             <h1 className="mt-8 font-display text-[64px] leading-[0.95] text-foreground md:text-[78px]">
-              Welcome back,
+              {isNew ? "Hello," : "Welcome back,"}
               <br />
-              <span className="text-aurora italic">Sofia</span>.
+              <span className="italic" style={{ color: driverAccent }}>{driverName}</span>.
             </h1>
             <p className="mt-7 max-w-md text-[15px] leading-relaxed text-muted-foreground">
-              The cabin is warm and your seat is the way you like it.
-              Take your time — I'll be ready whenever you are.
+              {isNew
+                ? "The cabin is yours. I'll learn how you like to move through the world, one drive at a time."
+                : "The cabin is warm and your seat is the way you like it. Take your time — I'll be ready whenever you are."}
             </p>
           </div>
 
           <div className="relative mt-12 text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
             Not you?{" "}
             <button
-              onClick={onFirstTime}
+              onClick={onSwitchDriver}
               className="ml-1 text-foreground/80 underline-offset-4 hover:text-aurora hover:underline"
             >
-              First time in this car
+              Switch driver
             </button>
           </div>
         </motion.section>
@@ -107,12 +117,14 @@ export function WelcomePhase({ onFirstTime }: WelcomePhaseProps) {
                 <div>
                   <div className="text-[11px] uppercase tracking-[0.22em] text-muted-foreground">Quietly noted</div>
                   <p className="mt-1 max-w-md text-[15px] leading-snug text-foreground/90">
-                    You usually prefer a slower start on Tuesdays. I'll ease into the drive.
+                    {isNew
+                      ? "Our very first drive together. I'll be listening more than speaking."
+                      : "You usually prefer a slower start on Tuesdays. I'll ease into the drive."}
                   </p>
                 </div>
               </div>
               <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
-                142 drives together
+                {isNew ? "First drive" : `${driverDrives} drives together`}
               </div>
             </div>
           </motion.div>
