@@ -1,4 +1,5 @@
 import { motion } from "motion/react";
+import { useEffect, useState } from "react";
 import { Battery, Signal, Cloud, MapPin } from "lucide-react";
 
 interface ChromeShellProps {
@@ -8,8 +9,15 @@ interface ChromeShellProps {
 }
 
 export function ChromeShell({ phaseLabel, driverName = "Sofia", rightStatus = "Connected" }: ChromeShellProps) {
-  const now = new Date();
-  const time = now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+  const [time, setTime] = useState<string>("");
+
+  useEffect(() => {
+    const fmt = () =>
+      new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", hour12: false });
+    setTime(fmt());
+    const id = setInterval(() => setTime(fmt()), 30_000);
+    return () => clearInterval(id);
+  }, []);
 
   return (
     <motion.div
@@ -27,7 +35,12 @@ export function ChromeShell({ phaseLabel, driverName = "Sofia", rightStatus = "C
       </div>
 
       <div className="flex items-center gap-6">
-        <span className="font-mono text-foreground/90 tracking-[0.15em] text-sm">{time}</span>
+        <span
+          suppressHydrationWarning
+          className="font-mono text-foreground/90 tracking-[0.15em] text-sm tabular-nums min-w-[3ch]"
+        >
+          {time || "\u00A0\u00A0:\u00A0\u00A0"}
+        </span>
         <div className="hidden md:flex items-center gap-1.5"><Cloud className="size-3.5" /> 14°</div>
         <div className="hidden md:flex items-center gap-1.5"><MapPin className="size-3.5" /> E18 · Oslo</div>
         <div className="flex items-center gap-1.5"><Signal className="size-3.5" /> 5G</div>

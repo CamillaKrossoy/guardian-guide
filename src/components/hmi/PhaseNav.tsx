@@ -1,12 +1,12 @@
 import { motion } from "motion/react";
 
-export type Phase = "onboarding" | "nudge" | "logic" | "takeover";
+export type Phase = "welcome" | "nudge" | "logic" | "takeover";
 
 const phases: { id: Phase; n: string; label: string; sub: string }[] = [
-  { id: "onboarding", n: "01", label: "Profile", sub: "Welcome & setup" },
-  { id: "nudge",      n: "02", label: "Nudge",   sub: "Smart suggestion" },
-  { id: "logic",      n: "03", label: "Intent",  sub: "What I plan to do" },
-  { id: "takeover",   n: "04", label: "Assist",  sub: "I need you here" },
+  { id: "welcome",  n: "01", label: "Welcome",  sub: "Continuing where we left off" },
+  { id: "nudge",    n: "02", label: "Suggest",  sub: "A gentle offer" },
+  { id: "logic",    n: "03", label: "Intent",   sub: "What I plan to do" },
+  { id: "takeover", n: "04", label: "Assist",   sub: "I need you here" },
 ];
 
 export function PhaseNav({ active, onChange }: { active: Phase; onChange: (p: Phase) => void }) {

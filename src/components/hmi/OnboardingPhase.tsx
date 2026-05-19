@@ -1,202 +1,198 @@
 import { motion, AnimatePresence } from "motion/react";
 import { useState } from "react";
 import { ChromeShell } from "./ChromeShell";
-import { ArrowRight, Sparkles, Shield, Heart } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
-const profiles = [
-  { name: "Sofia",  meta: "Returning · 142 trips", hue: "oklch(0.82 0.10 165)" },
-  { name: "Henrik", meta: "Returning · 38 trips",  hue: "oklch(0.86 0.10 75)"  },
-  { name: "Guest",  meta: "New profile",            hue: "oklch(0.78 0.12 195)" },
+interface OnboardingPhaseProps {
+  onComplete?: (name: string) => void;
+}
+
+type Step = "name" | "comfort" | "voice" | "ready";
+
+const comfortOptions = [
+  { id: "quiet",    label: "A quiet presence",   sub: "Speak only when it matters." },
+  { id: "company",  label: "Gentle company",     sub: "A few words now and then." },
+  { id: "guidance", label: "A reassuring guide", sub: "Talk me through what's happening." },
 ];
 
-const questions = [
-  { q: "When driving, you usually prefer…", a: ["A calm pace", "Steady flow", "Spirited drives"] },
-  { q: "On the motorway, you feel…",        a: ["Relaxed", "Focused", "A little tense"] },
-  { q: "You'd like the car to…",            a: ["Suggest gently", "Take initiative", "Stay quiet"] },
+const voiceOptions = [
+  { id: "soft",    label: "Soft and low" },
+  { id: "warm",    label: "Warm and steady" },
+  { id: "minimal", label: "Almost silent" },
 ];
 
-export function OnboardingPhase() {
-  const [step, setStep] = useState(0);
-  const [selected, setSelected] = useState<string | null>("Sofia");
-  const [answers, setAnswers] = useState<Record<number, string>>({});
+export function OnboardingPhase({ onComplete }: OnboardingPhaseProps) {
+  const [step, setStep] = useState<Step>("name");
+  const [name, setName] = useState("");
+  const [comfort, setComfort] = useState<string | null>(null);
+  const [voice, setVoice] = useState<string | null>(null);
+
+  const skipToReady = () => setStep("ready");
 
   return (
     <div className="flex h-full flex-col">
-      <ChromeShell phaseLabel="Phase 01 · Welcoming" driverName={selected ?? "Guest"} rightStatus="Profile sync" />
+      <ChromeShell phaseLabel="A first quiet conversation" driverName={name || "Friend"} rightStatus="Listening" />
 
-      <div className="mx-auto grid w-full max-w-6xl flex-1 grid-cols-1 gap-6 px-8 pb-6 md:grid-cols-12">
-        {/* Left: welcoming pane */}
-        <motion.section
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.9, ease: "easeOut" }}
-          className="glass relative overflow-hidden rounded-3xl p-10 md:col-span-5"
-        >
-          <div className="absolute -top-24 -right-24 size-72 rounded-full aurora-ring blur-2xl" />
-          <div className="absolute inset-x-10 top-10 h-px hairline" />
+      <div className="mx-auto flex w-full max-w-3xl flex-1 flex-col px-8 pb-10">
+        <div className="flex items-center justify-between text-[10px] uppercase tracking-[0.28em] text-muted-foreground">
+          <span>Only this once</span>
+          {step !== "ready" && (
+            <button onClick={skipToReady} className="hover:text-foreground">
+              Skip — we'll learn as we go
+            </button>
+          )}
+        </div>
 
-          <div className="relative">
-            <div className="flex items-center gap-2 text-[11px] uppercase tracking-[0.28em] text-muted-foreground">
-              <Sparkles className="size-3.5 text-aurora" /> Good evening
-            </div>
-            <h1 className="mt-6 font-display text-5xl leading-[1.05] text-foreground md:text-6xl">
-              Welcome back,
-              <br />
-              <span className="text-aurora italic">{selected ?? "friend"}</span>.
-            </h1>
-            <p className="mt-6 max-w-sm text-[15px] leading-relaxed text-muted-foreground">
-              I've been quietly learning the way you like to drive. We can pick up
-              where we left off — or take a moment to tune things together.
-            </p>
-
-            <div className="mt-10 grid grid-cols-3 gap-3">
-              {[
-                { icon: Heart,   label: "Adapts gradually" },
-                { icon: Shield,  label: "You stay in control" },
-                { icon: Sparkles,label: "Always optional" },
-              ].map(({ icon: Icon, label }) => (
-                <div key={label} className="glass-soft rounded-2xl p-4">
-                  <Icon className="size-4 text-aurora" />
-                  <div className="mt-3 text-xs leading-snug text-foreground/80">{label}</div>
-                </div>
-              ))}
-            </div>
-
-            <div className="mt-10 flex items-center gap-3 text-xs text-muted-foreground">
-              <div className="relative h-1 flex-1 overflow-hidden rounded-full bg-foreground/10">
-                <motion.div
-                  className="absolute inset-y-0 left-0 rounded-full bg-aurora/70"
-                  initial={{ width: "0%" }}
-                  animate={{ width: `${((step + 1) / 4) * 100}%` }}
-                  transition={{ duration: 0.6 }}
-                />
-              </div>
-              <span className="font-mono">{step + 1} / 4</span>
-            </div>
-          </div>
-        </motion.section>
-
-        {/* Right: conversational steps */}
-        <section className="glass relative overflow-hidden rounded-3xl p-8 md:col-span-7">
-          <div className="pointer-events-none absolute -inset-px opacity-60">
-            <div className="absolute inset-x-0 top-0 h-px hairline" />
-          </div>
+        <div className="relative flex-1">
+          <div className="pointer-events-none absolute inset-x-0 top-10 mx-auto size-[420px] rounded-full aurora-ring blur-3xl opacity-60" />
 
           <AnimatePresence mode="wait">
-            {step === 0 && (
-              <motion.div
-                key="profiles"
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -12 }}
-                transition={{ duration: 0.5 }}
-                className="flex h-full flex-col"
-              >
-                <Eyebrow>Who's driving tonight?</Eyebrow>
-                <h2 className="mt-2 font-display text-3xl">Choose your profile</h2>
+            {step === "name" && (
+              <Slide key="name">
+                <Murmur>I'd love to know what to call you.</Murmur>
+                <h1 className="mt-6 font-display text-5xl leading-tight text-foreground md:text-[64px]">
+                  What name feels like
+                  <br />
+                  <span className="italic text-aurora">home?</span>
+                </h1>
 
-                <div className="mt-8 grid gap-3">
-                  {profiles.map((p) => {
-                    const active = selected === p.name;
+                <div className="mt-12 max-w-md">
+                  <input
+                    autoFocus
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="Type a name, or a nickname"
+                    className="w-full border-0 border-b border-border/60 bg-transparent pb-3 font-display text-3xl text-foreground placeholder:text-muted-foreground/50 focus:border-aurora focus:outline-none"
+                  />
+                  <div className="mt-3 text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
+                    You can change this any time.
+                  </div>
+                </div>
+
+                <Next onClick={() => setStep("comfort")} disabled={!name.trim()} label="Lovely to meet you" />
+              </Slide>
+            )}
+
+            {step === "comfort" && (
+              <Slide key="comfort">
+                <Murmur>Long drives are easier with the right kind of company.</Murmur>
+                <h1 className="mt-6 font-display text-5xl leading-tight text-foreground md:text-6xl">
+                  When we're on the road, would you like…
+                </h1>
+
+                <div className="mt-12 grid gap-3">
+                  {comfortOptions.map((o) => {
+                    const active = comfort === o.id;
                     return (
                       <button
-                        key={p.name}
-                        onClick={() => setSelected(p.name)}
-                        className={`group relative flex items-center justify-between rounded-2xl border px-5 py-5 text-left transition-all
+                        key={o.id}
+                        onClick={() => setComfort(o.id)}
+                        className={`group flex items-center justify-between rounded-2xl border px-6 py-5 text-left transition-all
                           ${active
                             ? "border-aurora/50 bg-foreground/[0.04]"
-                            : "border-border/60 bg-foreground/[0.015] hover:bg-foreground/[0.03]"
-                          }`}
+                            : "border-border/50 hover:bg-foreground/[0.02]"}`}
                       >
-                        <div className="flex items-center gap-5">
-                          <span
-                            className="relative grid size-12 place-items-center rounded-full"
-                            style={{ background: `${p.hue.replace(")", " / 0.18)")}`, boxShadow: `inset 0 0 0 1px ${p.hue.replace(")", " / 0.35)")}` }}
-                          >
-                            <span className="font-display text-lg" style={{ color: p.hue }}>{p.name[0]}</span>
-                            {active && <span className="absolute inset-0 rounded-full animate-pulse-ring" style={{ background: `${p.hue.replace(")", " / 0.18)")}` }} />}
-                          </span>
-                          <div>
-                            <div className="text-base font-medium text-foreground">{p.name}</div>
-                            <div className="text-xs text-muted-foreground">{p.meta}</div>
-                          </div>
+                        <div>
+                          <div className="font-display text-2xl text-foreground">{o.label}</div>
+                          <div className="mt-1 text-sm text-muted-foreground">{o.sub}</div>
                         </div>
-                        <ArrowRight className={`size-4 transition ${active ? "text-aurora translate-x-0" : "text-muted-foreground -translate-x-1 opacity-0 group-hover:opacity-100 group-hover:translate-x-0"}`} />
+                        <span className={`size-2 rounded-full ${active ? "bg-aurora shadow-[0_0_12px_oklch(0.78_0.12_195)]" : "bg-foreground/15"}`} />
                       </button>
                     );
                   })}
                 </div>
 
-                <Footer onNext={() => setStep(1)} nextLabel="Continue" />
-              </motion.div>
+                <Next onClick={() => setStep("voice")} disabled={!comfort} label="Continue" />
+              </Slide>
             )}
 
-            {step >= 1 && step <= 3 && (
-              <motion.div
-                key={`q-${step}`}
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -12 }}
-                transition={{ duration: 0.5 }}
-                className="flex h-full flex-col"
-              >
-                <Eyebrow>A gentle question · {step} of 3</Eyebrow>
-                <h2 className="mt-2 font-display text-3xl leading-tight">{questions[step - 1].q}</h2>
-                <p className="mt-3 max-w-md text-sm text-muted-foreground">
-                  Your answer shapes how I suggest, when I speak, and how I drive. You can change anything later.
-                </p>
+            {step === "voice" && (
+              <Slide key="voice">
+                <Murmur>And the way I speak to you…</Murmur>
+                <h1 className="mt-6 font-display text-5xl leading-tight text-foreground md:text-6xl">
+                  Which voice feels <span className="italic text-aurora">restful?</span>
+                </h1>
 
-                <div className="mt-8 grid gap-3">
-                  {questions[step - 1].a.map((ans) => {
-                    const active = answers[step] === ans;
+                <div className="mt-12 flex flex-wrap gap-3">
+                  {voiceOptions.map((v) => {
+                    const active = voice === v.id;
                     return (
                       <button
-                        key={ans}
-                        onClick={() => setAnswers({ ...answers, [step]: ans })}
-                        className={`relative overflow-hidden rounded-2xl border px-5 py-4 text-left transition-all
+                        key={v.id}
+                        onClick={() => setVoice(v.id)}
+                        className={`rounded-full border px-6 py-3 font-display text-lg transition-all
                           ${active
-                            ? "border-aurora/50 bg-foreground/[0.05]"
-                            : "border-border/60 bg-foreground/[0.015] hover:bg-foreground/[0.03]"
-                          }`}
+                            ? "border-aurora/60 bg-aurora/10 text-foreground"
+                            : "border-border/50 text-foreground/80 hover:bg-foreground/[0.03]"}`}
                       >
-                        <div className="flex items-center justify-between">
-                          <span className="text-[15px] text-foreground">{ans}</span>
-                          <span className={`size-2.5 rounded-full ${active ? "bg-aurora shadow-[0_0_12px_oklch(0.78_0.12_195)]" : "bg-foreground/15"}`} />
-                        </div>
+                        {v.label}
                       </button>
                     );
                   })}
                 </div>
 
-                <Footer
-                  onBack={() => setStep(step - 1)}
-                  onNext={() => setStep(step + 1 > 3 ? 3 : step + 1)}
-                  nextLabel={step === 3 ? "Begin driving" : "Continue"}
-                />
-              </motion.div>
+                <p className="mt-10 max-w-md text-sm leading-relaxed text-muted-foreground">
+                  Everything else, I'll learn quietly — from how you drive, how you pause,
+                  how you settle in. Nothing you need to teach.
+                </p>
+
+                <Next onClick={() => setStep("ready")} disabled={!voice} label="That's enough for now" />
+              </Slide>
+            )}
+
+            {step === "ready" && (
+              <Slide key="ready">
+                <Murmur>Thank you{name ? `, ${name}` : ""}.</Murmur>
+                <h1 className="mt-6 font-display text-5xl leading-tight text-foreground md:text-[68px]">
+                  We'll get to know each other
+                  <br />
+                  <span className="italic text-aurora">one drive at a time.</span>
+                </h1>
+                <p className="mt-8 max-w-md text-[15px] leading-relaxed text-muted-foreground">
+                  Whenever you're ready, step in. I'll be here — calm, attentive,
+                  and learning the shape of how you like to move through the world.
+                </p>
+
+                <Next onClick={() => onComplete?.(name || "Friend")} label="Take me to the car" />
+              </Slide>
             )}
           </AnimatePresence>
-        </section>
+        </div>
       </div>
     </div>
   );
 }
 
-function Eyebrow({ children }: { children: React.ReactNode }) {
-  return <div className="text-[11px] uppercase tracking-[0.28em] text-aurora/80">{children}</div>;
+function Slide({ children }: { children: React.ReactNode }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 16 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -10 }}
+      transition={{ duration: 0.7, ease: [0.2, 0.8, 0.2, 1] }}
+      className="relative flex h-full flex-col pt-16"
+    >
+      {children}
+    </motion.div>
+  );
 }
 
-function Footer({ onNext, onBack, nextLabel }: { onNext: () => void; onBack?: () => void; nextLabel: string }) {
+function Murmur({ children }: { children: React.ReactNode }) {
   return (
-    <div className="mt-auto flex items-center justify-between pt-10">
-      <div className="text-xs text-muted-foreground">
-        {onBack ? <button onClick={onBack} className="hover:text-foreground">← Back</button> : <span className="opacity-60">Adaptive learning · enabled</span>}
-      </div>
+    <div className="text-[11px] uppercase tracking-[0.32em] text-aurora/80">{children}</div>
+  );
+}
+
+function Next({ onClick, disabled, label }: { onClick: () => void; disabled?: boolean; label: string }) {
+  return (
+    <div className="mt-auto pt-16">
       <button
-        onClick={onNext}
-        className="group inline-flex items-center gap-3 rounded-full bg-foreground px-6 py-3 text-sm font-medium text-background transition-all hover:bg-foreground/90"
+        onClick={onClick}
+        disabled={disabled}
+        className="group inline-flex items-center gap-3 rounded-full bg-foreground/95 px-7 py-3.5 text-sm font-medium text-background transition-all hover:bg-foreground disabled:cursor-not-allowed disabled:opacity-30"
       >
-        {nextLabel} <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
+        {label}
+        <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
       </button>
     </div>
   );
