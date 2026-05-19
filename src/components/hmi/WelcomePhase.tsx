@@ -4,13 +4,22 @@ import { RoadView } from "./RoadView";
 import { Moon, MapPin, Music2, Thermometer } from "lucide-react";
 
 interface WelcomePhaseProps {
-  onFirstTime?: () => void;
+  driverName?: string;
+  driverAccent?: string;
+  driverDrives?: number;
+  onSwitchDriver?: () => void;
 }
 
-export function WelcomePhase({ onFirstTime }: WelcomePhaseProps) {
+export function WelcomePhase({
+  driverName = "Sofia",
+  driverAccent = "oklch(0.82 0.10 200)",
+  driverDrives = 142,
+  onSwitchDriver,
+}: WelcomePhaseProps) {
+  const isNew = driverDrives === 0;
   return (
     <div className="flex h-full flex-col">
-      <ChromeShell phaseLabel="Continuing where we left off" rightStatus="At rest" />
+      <ChromeShell phaseLabel="Continuing where we left off" driverName={driverName} rightStatus="At rest" />
 
       <div className="mx-auto grid w-full max-w-7xl flex-1 grid-cols-1 gap-6 px-8 pb-6 lg:grid-cols-12">
         {/* Left — soft greeting */}
