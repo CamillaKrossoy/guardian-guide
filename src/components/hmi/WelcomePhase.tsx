@@ -117,12 +117,14 @@ export function WelcomePhase({
                 <div>
                   <div className="text-[11px] uppercase tracking-[0.22em] text-muted-foreground">Quietly noted</div>
                   <p className="mt-1 max-w-md text-[15px] leading-snug text-foreground/90">
-                    You usually prefer a slower start on Tuesdays. I'll ease into the drive.
+                    {isNew
+                      ? "Our very first drive together. I'll be listening more than speaking."
+                      : "You usually prefer a slower start on Tuesdays. I'll ease into the drive."}
                   </p>
                 </div>
               </div>
               <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
-                142 drives together
+                {isNew ? "First drive" : `${driverDrives} drives together`}
               </div>
             </div>
           </motion.div>
