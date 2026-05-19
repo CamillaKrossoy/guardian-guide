@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { PhaseNav, type Phase } from "@/components/hmi/PhaseNav";
+import { ArrivalPhase, type DriverProfile } from "@/components/hmi/ArrivalPhase";
 import { WelcomePhase } from "@/components/hmi/WelcomePhase";
 import { OnboardingPhase } from "@/components/hmi/OnboardingPhase";
 import { NudgePhase } from "@/components/hmi/NudgePhase";
@@ -12,9 +13,17 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
+type Stage = "arrival" | "onboarding" | "cabin";
+
 function Index() {
+  const [stage, setStage] = useState<Stage>("arrival");
   const [phase, setPhase] = useState<Phase>("welcome");
-  const [firstTime, setFirstTime] = useState(false);
+  const [driver, setDriver] = useState<DriverProfile | null>(null);
+
+  const key =
+    stage === "arrival" ? "arrival" :
+    stage === "onboarding" ? "onboarding" :
+    `cabin-${phase}`;
 
   return (
     <div className="relative flex min-h-screen flex-col">
@@ -29,23 +38,53 @@ function Index() {
         <div className="flex-1">
           <AnimatePresence mode="wait">
             <motion.div
-              key={firstTime ? "onboarding" : phase}
+              key={key}
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.5, ease: [0.2, 0.8, 0.2, 1] }}
+              transition={{ duration: 0.6, ease: [0.2, 0.8, 0.2, 1] }}
               className="min-h-[calc(100vh-120px)]"
             >
-              {firstTime ? (
-                <OnboardingPhase
-                  onComplete={() => {
-                    setFirstTime(false);
+              {stage === "arrival" && (
+                <ArrivalPhase
+                  onSelect={(p) => {
+                    setDriver(p);
                     setPhase("welcome");
+                    setStage("cabin");
+                  }}
+                  onNewDriver={() => setStage("onboarding")}
+                />
+              )}
+
+              {stage === "onboarding" && (
+                <OnboardingPhase
+                  onComplete={(name) => {
+                    setDriver({
+                      id: "new",
+                      name,
+                      initials: name.charAt(0).toUpperCase() || "•",
+                      accent: "oklch(0.78 0.12 195)",
+                      lastSeen: "Just now",
+                      drives: 0,
+                      signature: "Still learning the shape of your drives.",
+                      lastRoute: "—",
+                    });
+                    setPhase("welcome");
+                    setStage("cabin");
                   }}
                 />
-              ) : (
+              )}
+
+              {stage === "cabin" && (
                 <>
-                  {phase === "welcome"  && <WelcomePhase onFirstTime={() => setFirstTime(true)} />}
+                  {phase === "welcome"  && (
+                    <WelcomePhase
+                      driverName={driver?.name}
+                      driverAccent={driver?.accent}
+                      driverDrives={driver?.drives}
+                      onSwitchDriver={() => setStage("arrival")}
+                    />
+                  )}
                   {phase === "nudge"    && <NudgePhase />}
                   {phase === "logic"    && <LogicPhase />}
                   {phase === "takeover" && <TakeoverPhase />}
@@ -55,7 +94,7 @@ function Index() {
           </AnimatePresence>
         </div>
 
-        {!firstTime && <PhaseNav active={phase} onChange={setPhase} />}
+        {stage === "cabin" && <PhaseNav active={phase} onChange={setPhase} />}
       </div>
     </div>
   );
