@@ -56,16 +56,16 @@ export function ArrivalPhase({ onSelect, onNewDriver }: ArrivalPhaseProps) {
   const [hovered, setHovered] = useState<string | null>("sofia");
   const [chosen, setChosen] = useState<string | null>(null);
 
-  // brief recognition pause before handing off
+  // a calm recognition moment — long enough to emotionally register
   useEffect(() => {
     if (!chosen) return;
     if (chosen === "__new__") {
-      const t = setTimeout(onNewDriver, 900);
+      const t = setTimeout(onNewDriver, 2400);
       return () => clearTimeout(t);
     }
     const p = profiles.find((x) => x.id === chosen);
     if (!p) return;
-    const t = setTimeout(() => onSelect(p), 1100);
+    const t = setTimeout(() => onSelect(p), 2900);
     return () => clearTimeout(t);
   }, [chosen, onSelect, onNewDriver]);
 
