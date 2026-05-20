@@ -274,34 +274,54 @@ function Recognition({ chosen }: { chosen: string }) {
 
   return (
     <motion.div
-      initial={{ opacity: 0, scale: 0.96 }}
+      initial={{ opacity: 0, scale: 0.97 }}
       animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.9, ease: [0.2, 0.8, 0.2, 1] }}
+      exit={{ opacity: 0, scale: 1.02, filter: "blur(6px)" }}
+      transition={{
+        opacity: { duration: 1.2, ease: [0.22, 0.7, 0.2, 1] },
+        scale: { duration: 1.6, ease: [0.22, 0.7, 0.2, 1] },
+        filter: { duration: 0.9 },
+      }}
       className="relative flex flex-col items-center text-center"
     >
-      <span
+      <motion.span
         className="absolute -inset-32 rounded-full blur-3xl"
-        style={{ background: `radial-gradient(circle, ${accent} 0%, transparent 65%)`, opacity: 0.35 }}
+        style={{ background: `radial-gradient(circle, ${accent} 0%, transparent 65%)` }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: [0, 0.4, 0.32, 0.4] }}
+        transition={{ duration: 2.6, ease: "easeInOut", times: [0, 0.4, 0.7, 1] }}
       />
-      <span
+      <motion.span
         className="relative grid size-24 place-items-center rounded-full font-display text-4xl text-background"
         style={{
           background: `linear-gradient(135deg, ${accent}, oklch(0.55 0.06 230))`,
           boxShadow: `0 0 0 1px oklch(1 0 0 / 0.1), 0 20px 60px -10px ${accent}`,
         }}
+        animate={{ scale: [1, 1.04, 1] }}
+        transition={{ duration: 2.4, ease: "easeInOut", repeat: Infinity }}
       >
         {profile?.initials ?? "+"}
         <span
           className="absolute -inset-2 rounded-full animate-pulse-ring"
           style={{ background: `radial-gradient(circle, ${accent} 0%, transparent 70%)`, opacity: 0.5 }}
         />
-      </span>
-      <div className="relative mt-8 text-[11px] uppercase tracking-[0.32em] text-aurora/80">
+      </motion.span>
+      <motion.div
+        initial={{ opacity: 0, y: 6 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1.0, delay: 0.35, ease: [0.22, 0.7, 0.2, 1] }}
+        className="relative mt-8 text-[11px] uppercase tracking-[0.32em] text-aurora/80"
+      >
         {isNew ? "A new conversation" : "Recognizing"}
-      </div>
-      <h2 className="relative mt-3 font-display text-4xl text-foreground md:text-5xl">
+      </motion.div>
+      <motion.h2
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1.1, delay: 0.6, ease: [0.22, 0.7, 0.2, 1] }}
+        className="relative mt-3 font-display text-4xl text-foreground md:text-5xl"
+      >
         {isNew ? "Let's begin gently." : <>Welcome back, <span className="italic text-aurora">{name}</span>.</>}
-      </h2>
+      </motion.h2>
     </motion.div>
   );
 }
