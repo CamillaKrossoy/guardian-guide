@@ -39,10 +39,14 @@ function Index() {
           <AnimatePresence mode="wait">
             <motion.div
               key={key}
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.6, ease: [0.2, 0.8, 0.2, 1] }}
+              initial={{ opacity: 0, y: 8, filter: "blur(6px)" }}
+              animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+              exit={{ opacity: 0, y: -6, filter: "blur(4px)" }}
+              transition={{
+                opacity: { duration: 1.0, ease: [0.22, 0.7, 0.2, 1] },
+                y: { duration: 1.0, ease: [0.22, 0.7, 0.2, 1] },
+                filter: { duration: 0.9 },
+              }}
               className="min-h-[calc(100vh-120px)]"
             >
               {stage === "arrival" && (
