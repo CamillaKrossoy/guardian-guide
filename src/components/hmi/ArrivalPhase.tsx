@@ -173,7 +173,9 @@ export function ArrivalPhase({ onSelect, onNewDriver }: ArrivalPhaseProps) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.6 }}
+            transition={{
+              opacity: { duration: 1.1, ease: [0.22, 0.7, 0.2, 1] },
+            }}
             className="flex flex-1 items-center justify-center px-8"
           >
             <Recognition chosen={chosen} />
