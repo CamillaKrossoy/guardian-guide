@@ -436,61 +436,8 @@ export function NudgePhase() {
 
 /* ---------- Sub-components ---------- */
 
-function ModeBanner({ mode }: { mode: Mode }) {
-  const isAuto = mode === "autonomous" || mode === "handover";
-  return (
-    <div className="mx-auto w-full max-w-7xl px-8">
-      <motion.div
-        layout
-        className="mb-4 flex items-center justify-between rounded-2xl border px-5 py-3 text-[11px] uppercase tracking-[0.22em]"
-        animate={{
-          borderColor: isAuto
-            ? "oklch(0.82 0.10 165 / 0.35)"
-            : "oklch(0.78 0.12 195 / 0.18)",
-          backgroundColor: isAuto
-            ? "oklch(0.82 0.10 165 / 0.06)"
-            : "oklch(0.20 0.02 240 / 0.25)",
-        }}
-        transition={{ duration: 1.2, ease: "easeInOut" }}
-      >
-        <div className="flex items-center gap-3">
-          <motion.span
-            className="size-2 rounded-full"
-            animate={{
-              backgroundColor: isAuto ? "oklch(0.86 0.12 170)" : "oklch(0.86 0.10 200)",
-              boxShadow: isAuto
-                ? "0 0 14px oklch(0.86 0.12 170 / 0.8)"
-                : "0 0 8px oklch(0.86 0.10 200 / 0.5)",
-            }}
-            transition={{ duration: 1 }}
-          />
-          <AnimatePresence mode="wait">
-            <motion.span
-              key={mode}
-              initial={{ opacity: 0, y: 4 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -4 }}
-              transition={{ duration: 0.5 }}
-              className={isAuto ? "text-aurora-warm" : "text-foreground/85"}
-            >
-              {mode === "autonomous" && "AURA is driving · supervise gently"}
-              {mode === "handover"   && "Handing over to AURA…"}
-              {mode === "suggesting" && "You are driving · suggestion available"}
-              {mode === "declined"   && "You are driving · I'm on standby"}
-              {mode === "manual"     && "You are driving · I'm observing"}
-            </motion.span>
-          </AnimatePresence>
-        </div>
-        <div className="flex items-center gap-2 text-muted-foreground">
-          <Gauge className="size-3.5" />
-          <span className="font-mono">{isAuto ? "L3 · Eyes-on" : "L2 · Hands-on"}</span>
-        </div>
-      </motion.div>
-    </div>
-  );
-}
 
-function ResponsibilityCard({ mode }: { mode: Mode }) {
+
   const isAuto = mode === "autonomous" || mode === "handover";
   return (
     <motion.div
