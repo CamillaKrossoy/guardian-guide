@@ -15,7 +15,6 @@ import {
   Eye,
   Radar,
   ShieldCheck,
-  Gauge,
 } from "lucide-react";
 
 type Mode = "manual" | "suggesting" | "declined" | "handover" | "autonomous";
