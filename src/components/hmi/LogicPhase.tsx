@@ -80,6 +80,18 @@ export function LogicPhase() {
     <div className="flex h-full flex-col">
       <ChromeShell phaseLabel="Phase 03 · Autonomous · Level 3" rightStatus="In control" />
 
+      <ModeBar
+        mode="autonomous"
+        confidence={0.94}
+        hint={
+          decision === "pending"
+            ? "Awaiting your decision"
+            : decision === "stayed"
+            ? "Holding lane · adaptive cruise"
+            : "Executing maneuver"
+        }
+      />
+
       <div className="mx-auto grid w-full max-w-7xl flex-1 grid-cols-1 gap-6 px-8 pb-6 lg:grid-cols-12">
         {/* Left — awareness */}
         <aside className="glass flex flex-col gap-5 rounded-3xl p-6 lg:col-span-3">
