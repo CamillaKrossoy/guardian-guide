@@ -29,6 +29,12 @@ export function TakeoverPhase() {
     <div className="flex h-full flex-col">
       <ChromeShell phaseLabel="Phase 04 · Cooperative handoff" rightStatus="Asking for assistance" />
 
+      <ModeBar
+        mode="takeover"
+        confidence={Math.max(0.18, seconds / 10) }
+        hint={tierLabel}
+      />
+
       <div className="mx-auto grid w-full max-w-7xl flex-1 grid-cols-1 gap-6 px-8 pb-6 lg:grid-cols-12">
         {/* Left — situation */}
         <aside className="glass flex flex-col gap-5 rounded-3xl p-6 lg:col-span-3">
