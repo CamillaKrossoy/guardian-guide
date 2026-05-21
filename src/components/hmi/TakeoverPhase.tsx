@@ -2,6 +2,7 @@ import { motion } from "motion/react";
 import { useEffect, useState } from "react";
 import { ChromeShell } from "./ChromeShell";
 import { RoadView } from "./RoadView";
+import { ModeBar } from "./ModeBar";
 import { Hand, Eye, CloudRain, AlertCircle } from "lucide-react";
 
 export function TakeoverPhase() {
@@ -27,6 +28,12 @@ export function TakeoverPhase() {
   return (
     <div className="flex h-full flex-col">
       <ChromeShell phaseLabel="Phase 04 · Cooperative handoff" rightStatus="Asking for assistance" />
+
+      <ModeBar
+        mode="takeover"
+        confidence={Math.max(0.18, seconds / 10) }
+        hint={tierLabel}
+      />
 
       <div className="mx-auto grid w-full max-w-7xl flex-1 grid-cols-1 gap-6 px-8 pb-6 lg:grid-cols-12">
         {/* Left — situation */}

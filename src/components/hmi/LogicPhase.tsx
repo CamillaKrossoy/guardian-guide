@@ -2,6 +2,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useMemo, useState } from "react";
 import { ChromeShell } from "./ChromeShell";
 import { RoadView } from "./RoadView";
+import { ModeBar } from "./ModeBar";
 import { Eye, Route, Gauge, Check, X, CheckCircle2 } from "lucide-react";
 
 type Decision = "pending" | "executing" | "stayed";
@@ -78,6 +79,18 @@ export function LogicPhase() {
   return (
     <div className="flex h-full flex-col">
       <ChromeShell phaseLabel="Phase 03 · Autonomous · Level 3" rightStatus="In control" />
+
+      <ModeBar
+        mode="autonomous"
+        confidence={0.94}
+        hint={
+          decision === "pending"
+            ? "Awaiting your decision"
+            : decision === "stayed"
+            ? "Holding lane · adaptive cruise"
+            : "Executing maneuver"
+        }
+      />
 
       <div className="mx-auto grid w-full max-w-7xl flex-1 grid-cols-1 gap-6 px-8 pb-6 lg:grid-cols-12">
         {/* Left — awareness */}
