@@ -82,7 +82,10 @@ export function NudgePhase() {
       <ChromeShell phaseLabel={phaseLabel} rightStatus={rightStatus} />
 
       {/* Driving-mode banner — always present, instantly readable */}
-      <ModeBanner mode={mode} />
+      <ModeBar
+        mode={mode === "declined" ? "manual" : mode}
+        confidence={mode === "autonomous" ? 0.92 : mode === "handover" ? 0.86 : mode === "suggesting" ? 0.86 : 0.74}
+      />
 
       <div className="mx-auto grid w-full max-w-7xl flex-1 grid-cols-1 gap-6 px-8 pb-6 lg:grid-cols-12">
         {/* LEFT: telemetry — adapts to who's driving */}
