@@ -2,6 +2,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useMemo, useState } from "react";
 import { ChromeShell } from "./ChromeShell";
 import { RoadView } from "./RoadView";
+import { ModeBar } from "./ModeBar";
 import { Eye, Route, Gauge, Check, X, CheckCircle2 } from "lucide-react";
 
 type Decision = "pending" | "executing" | "stayed";
