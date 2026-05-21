@@ -436,8 +436,7 @@ export function NudgePhase() {
 
 /* ---------- Sub-components ---------- */
 
-
-
+function ResponsibilityCard({ mode }: { mode: Mode }) {
   const isAuto = mode === "autonomous" || mode === "handover";
   return (
     <motion.div
