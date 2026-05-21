@@ -2,6 +2,7 @@ import { motion } from "motion/react";
 import { useEffect, useState } from "react";
 import { ChromeShell } from "./ChromeShell";
 import { RoadView } from "./RoadView";
+import { ModeBar } from "./ModeBar";
 import { Hand, Eye, CloudRain, AlertCircle } from "lucide-react";
 
 export function TakeoverPhase() {
