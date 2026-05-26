@@ -87,18 +87,19 @@ function Index() {
                       driverAccent={driver?.accent}
                       driverDrives={driver?.drives}
                       onSwitchDriver={() => setStage("arrival")}
+                      onStartAutonomy={() => setPhase("logic")}
                     />
                   )}
-                  {phase === "nudge"    && <NudgePhase />}
-                  {phase === "logic"    && <LogicPhase />}
-                  {phase === "takeover" && <TakeoverPhase />}
+                  {phase === "nudge"    && <NudgePhase onHome={() => setPhase("welcome")} />}
+                  {phase === "logic"    && <LogicPhase onHome={() => setPhase("welcome")} />}
+                  {phase === "takeover" && <TakeoverPhase onHome={() => setPhase("welcome")} />}
                 </>
               )}
             </motion.div>
           </AnimatePresence>
         </div>
 
-        {stage === "cabin" && <PhaseNav active={phase} onChange={setPhase} />}
+        {stage === "cabin" && phase !== "welcome" && <PhaseNav active={phase} onChange={setPhase} />}
       </div>
     </div>
   );

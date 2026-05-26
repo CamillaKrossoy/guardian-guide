@@ -26,7 +26,7 @@ const HANDOVER_STEPS = [
   { label: "I have control", hint: "You can supervise" },
 ];
 
-export function NudgePhase() {
+export function NudgePhase({ onHome }: { onHome?: () => void } = {}) {
   const [mode, setMode] = useState<Mode>("suggesting");
   const [handoverStep, setHandoverStep] = useState(0);
 
@@ -78,7 +78,7 @@ export function NudgePhase() {
         transition={{ duration: 2.2, ease: "easeInOut" }}
       />
 
-      <ChromeShell phaseLabel={phaseLabel} rightStatus={rightStatus} />
+      <ChromeShell phaseLabel={phaseLabel} rightStatus={rightStatus} onHome={onHome} />
 
       {/* Driving-mode banner — always present, instantly readable */}
       <ModeBar
@@ -141,8 +141,8 @@ export function NudgePhase() {
             </div>
             <p className="mt-2 text-xs leading-relaxed text-foreground/80">
               {isAuto
-                ? "Hands free is fine. Eyes on the road, please — I'll hand back if anything changes."
-                : "I noticed you brake earlier than usual today. I'll keep a calmer pace."}
+                ? "Hands free. Eyes on the road — I'll hand back if anything changes."
+                : "You brake earlier than usual today. I'll keep a calmer pace."}
             </p>
           </div>
         </aside>
@@ -234,8 +234,7 @@ export function NudgePhase() {
                     <div className="flex-1">
                       <div className="text-[11px] uppercase tracking-[0.22em] text-aurora">A gentle suggestion</div>
                       <p className="mt-2 font-display text-[22px] leading-snug text-foreground">
-                        Traffic is flowing predictably. I could take over the next 18 km to
-                        help you arrive a little more rested.
+                        Traffic is flowing well. I can take over the next 18 km.
                       </p>
 
                       <div className="mt-5 flex flex-wrap gap-2">
@@ -282,7 +281,7 @@ export function NudgePhase() {
               >
                 <div className="glass-soft flex items-center gap-3 rounded-2xl px-5 py-3 text-sm text-foreground/85">
                   <Hand className="size-4 text-trust" />
-                  <span>Understood. You're still driving — I'm here if you need me.</span>
+                  <span>Understood. You're still driving.</span>
                 </div>
               </motion.div>
             )}
@@ -305,7 +304,7 @@ export function NudgePhase() {
                     <div className="flex-1">
                       <div className="text-[11px] uppercase tracking-[0.22em] text-aurora-warm">Easing into control</div>
                       <p className="mt-2 font-display text-[20px] leading-snug text-foreground">
-                        Taking the wheel softly. You'll feel it settle in a moment.
+                        Taking the wheel softly.
                       </p>
 
                       {/* Progress rail */}
@@ -507,11 +506,11 @@ function ResponsibilityCard({ mode }: { mode: Mode }) {
       </div>
 
       <p className="mt-4 text-[11px] leading-relaxed text-foreground/70">
-        {mode === "autonomous" && "I'm driving. You can rest your hands — please keep your eyes available."}
-        {mode === "handover"   && "Transferring responsibility. Stay loosely engaged for a moment."}
-        {mode === "suggesting" && "You're in full control. I'm offering — never insisting."}
-        {mode === "declined"   && "Staying on standby. Adaptive support remains active."}
-        {mode === "manual"     && "You're in full control. I'm quietly assisting in the background."}
+        {mode === "autonomous" && "I'm driving. Rest your hands — eyes available."}
+        {mode === "handover"   && "Transferring control. Stay loosely engaged."}
+        {mode === "suggesting" && "You're in control. I'm only offering."}
+        {mode === "declined"   && "On standby. Support remains active."}
+        {mode === "manual"     && "You're in control. Quiet assist in the background."}
       </p>
     </motion.div>
   );

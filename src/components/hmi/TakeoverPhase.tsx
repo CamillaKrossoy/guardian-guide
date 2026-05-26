@@ -25,7 +25,7 @@ const DEGRADING_DURATION = 3400;  // sensor uncertainty rising
 const COUNTDOWN_START = 10;       // handoff seconds
 const COUNTDOWN_TICK = 1000;
 
-export function TakeoverPhase() {
+export function TakeoverPhase({ onHome }: { onHome?: () => void } = {}) {
   const [stage, setStage] = useState<Stage>("auto");
   const [seconds, setSeconds] = useState(COUNTDOWN_START);
   const [paused, setPaused] = useState(false);
@@ -97,7 +97,7 @@ export function TakeoverPhase() {
 
   return (
     <div className="flex h-full flex-col">
-      <ChromeShell phaseLabel={chromeLabel[stage]} rightStatus={chromeStatus[stage]} />
+      <ChromeShell phaseLabel={chromeLabel[stage]} rightStatus={chromeStatus[stage]} onHome={onHome} />
 
       <ModeBar mode={mode} confidence={confidence} hint={modeHint} />
 
@@ -149,7 +149,7 @@ export function TakeoverPhase() {
                 tone="oklch(0.82 0.10 165)"
                 kicker="Autonomous · L3"
                 title="I have the road."
-                body="Cruising at 96 km/h. Trajectory stable, traffic predictable. You can relax your hands and stay eyes-on."
+                body="Cruising at 96 km/h. Eyes-on, hands relaxed."
                 icon={ShieldCheck}
               />
             )}
@@ -158,8 +158,8 @@ export function TakeoverPhase() {
                 key="msg-deg"
                 tone="oklch(0.86 0.13 75)"
                 kicker="Reviewing conditions"
-                title="Something ahead needs a closer look."
-                body="Rain is intensifying and lane markings are fading. I'm reducing speed and preparing to ask for your help."
+                title="Closer look ahead."
+                body="Rain intensifying. Easing speed — may ask for help."
                 icon={Radar}
               />
             )}
@@ -170,10 +170,10 @@ export function TakeoverPhase() {
                 kicker={["Soft handoff", "Preparing handoff", "Hand-on now"][tier]}
                 title={[
                   "I'd like your help shortly.",
-                  "Please rest your hands on the wheel.",
-                  "Take control now — together.",
+                  "Rest your hands on the wheel.",
+                  "Take control — together.",
                 ][tier]}
-                body="I'm slowing slightly to give us both more room. You'll feel the wheel offer resistance — we'll take it together."
+                body="Slowing slightly. The wheel will offer resistance."
                 icon={Hand}
               />
             )}
@@ -182,8 +182,8 @@ export function TakeoverPhase() {
                 key="msg-man"
                 tone="oklch(0.78 0.12 195)"
                 kicker="Control restored"
-                title="You have the wheel. I'm right here."
-                body="Handoff complete. Lane-keep and collision support are quietly active. I'll let you know when conditions improve."
+                title="You have the wheel."
+                body="Lane-keep and collision support quietly active."
                 icon={CheckCircle2}
               />
             )}
@@ -364,12 +364,12 @@ export function TakeoverPhase() {
           </div>
 
           <p className="text-center text-xs leading-relaxed text-muted-foreground">
-            {stage === "auto" && "Sit back. I'll keep watching the road for both of us."}
-            {stage === "degrading" && "I'm preparing you gently — no surprises."}
+            {stage === "auto" && "Sit back. I'm watching the road."}
+            {stage === "degrading" && "Preparing you gently."}
             {stage === "handoff" && (
-              <>I'll keep driving until you're ready. If you need a moment, just say <span className="text-foreground">"give me a second"</span>.</>
+              <>Say <span className="text-foreground">"give me a second"</span> if you need a moment.</>
             )}
-            {stage === "manual" && "Drive comfortably. I'll re-offer autonomy when conditions are right."}
+            {stage === "manual" && "Drive comfortably. I'll re-offer when conditions clear."}
           </p>
 
           <div className="mt-auto flex w-full flex-col gap-2">

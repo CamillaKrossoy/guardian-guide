@@ -50,10 +50,10 @@ export function OnboardingPhase({ onComplete }: OnboardingPhaseProps) {
             {step === "name" && (
               <Slide key="name">
                 <Murmur>I'd love to know what to call you.</Murmur>
-                <h1 className="mt-6 font-display text-5xl leading-tight text-foreground md:text-[64px]">
+                <h1 className="mt-6 font-display text-5xl font-light tracking-tight leading-tight text-foreground md:text-[64px]">
                   What name feels like
                   <br />
-                  <span className="italic text-aurora">home?</span>
+                  <span className="text-aurora">home?</span>
                 </h1>
 
                 <div className="mt-12 max-w-md">
@@ -109,8 +109,8 @@ export function OnboardingPhase({ onComplete }: OnboardingPhaseProps) {
             {step === "voice" && (
               <Slide key="voice">
                 <Murmur>And the way I speak to you…</Murmur>
-                <h1 className="mt-6 font-display text-5xl leading-tight text-foreground md:text-6xl">
-                  Which voice feels <span className="italic text-aurora">restful?</span>
+                <h1 className="mt-6 font-display text-5xl font-light tracking-tight leading-tight text-foreground md:text-6xl">
+                  Which voice feels <span className="text-aurora">restful?</span>
                 </h1>
 
                 <div className="mt-12 flex flex-wrap gap-3">
@@ -143,14 +143,13 @@ export function OnboardingPhase({ onComplete }: OnboardingPhaseProps) {
             {step === "ready" && (
               <Slide key="ready">
                 <Murmur>Thank you{name ? `, ${name}` : ""}.</Murmur>
-                <h1 className="mt-6 font-display text-5xl leading-tight text-foreground md:text-[68px]">
+                <h1 className="mt-6 font-display text-5xl font-light tracking-tight leading-tight text-foreground md:text-[68px]">
                   We'll get to know each other
                   <br />
-                  <span className="italic text-aurora">one drive at a time.</span>
+                  <span className="text-aurora">one drive at a time.</span>
                 </h1>
                 <p className="mt-8 max-w-md text-[15px] leading-relaxed text-muted-foreground">
-                  Whenever you're ready, step in. I'll be here — calm, attentive,
-                  and learning the shape of how you like to move through the world.
+                  Step in whenever you're ready.
                 </p>
 
                 <Next onClick={() => onComplete?.(name || "Friend")} label="Take me to the car" />
