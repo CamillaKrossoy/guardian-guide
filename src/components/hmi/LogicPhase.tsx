@@ -179,9 +179,9 @@ export function LogicPhase({ onHome }: { onHome?: () => void } = {}) {
                     className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between"
                   >
                     <div className="flex-1">
-                      <div className="text-[11px] uppercase tracking-[0.22em] text-caution">Asking your permission</div>
+                      <div className="text-[11px] uppercase tracking-[0.22em] text-caution">Asking permission</div>
                       <p className="mt-2 font-display text-[22px] leading-snug">
-                        Would you like me to overtake the vehicle ahead? The left lane is clear and the maneuver feels safe.
+                        Overtake the vehicle ahead? Left lane is clear.
                       </p>
                     </div>
 
@@ -299,7 +299,7 @@ export function LogicPhase({ onHome }: { onHome?: () => void } = {}) {
           </ol>
 
           <div className="mt-auto rounded-2xl border border-border/50 bg-foreground/[0.02] p-4 text-[11px] text-muted-foreground">
-            You can interrupt anytime — touch the wheel or say <span className="text-foreground">"hold on"</span>.
+            Touch the wheel or say <span className="text-foreground">"hold on"</span> to interrupt.
           </div>
         </aside>
       </div>

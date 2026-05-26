@@ -92,13 +92,13 @@ export function ArrivalPhase({ onSelect, onNewDriver }: ArrivalPhaseProps) {
                 <div className="text-[11px] uppercase tracking-[0.32em] text-aurora/80">
                   Good evening
                 </div>
-                <h1 className="mt-5 font-display text-5xl leading-[1.02] text-foreground md:text-[68px]">
+                <h1 className="mt-5 font-display text-5xl font-light leading-[1.02] tracking-tight text-foreground md:text-[68px]">
                   Who is driving
                   <br />
-                  <span className="italic text-aurora">tonight?</span>
+                  <span className="text-aurora">tonight?</span>
                 </h1>
                 <p className="mt-5 max-w-md text-[14px] leading-relaxed text-muted-foreground">
-                  Choose your profile so the car can pick up where you left off.
+                  Choose your profile.
                 </p>
               </div>
             </div>
@@ -318,9 +318,9 @@ function Recognition({ chosen }: { chosen: string }) {
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1.1, delay: 0.6, ease: [0.22, 0.7, 0.2, 1] }}
-        className="relative mt-3 font-display text-4xl text-foreground md:text-5xl"
+        className="relative mt-3 font-display text-4xl font-light tracking-tight text-foreground md:text-5xl"
       >
-        {isNew ? "Let's begin gently." : <>Welcome back, <span className="italic text-aurora">{name}</span>.</>}
+        {isNew ? "Let's begin gently." : <>Welcome back, <span className="text-aurora">{name}</span>.</>}
       </motion.h2>
     </motion.div>
   );
