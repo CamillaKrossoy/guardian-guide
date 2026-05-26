@@ -1,14 +1,15 @@
 import { motion } from "motion/react";
 import { useEffect, useState } from "react";
-import { Battery, Signal, Cloud, MapPin } from "lucide-react";
+import { Battery, Signal, Cloud, MapPin, Home } from "lucide-react";
 
 interface ChromeShellProps {
   phaseLabel: string;
   driverName?: string;
   rightStatus?: string;
+  onHome?: () => void;
 }
 
-export function ChromeShell({ phaseLabel, driverName = "Sofia", rightStatus = "Connected" }: ChromeShellProps) {
+export function ChromeShell({ phaseLabel, driverName = "Sofia", rightStatus = "Connected", onHome }: ChromeShellProps) {
   const [time, setTime] = useState<string>("");
 
   useEffect(() => {
@@ -26,7 +27,17 @@ export function ChromeShell({ phaseLabel, driverName = "Sofia", rightStatus = "C
       transition={{ duration: 0.8, ease: "easeOut" }}
       className="flex items-center justify-between px-8 py-5 text-[11px] uppercase tracking-[0.22em] text-muted-foreground"
     >
-      <div className="flex items-center gap-6">
+      <div className="flex items-center gap-5">
+        {onHome && (
+          <button
+            onClick={onHome}
+            className="group inline-flex items-center gap-2 rounded-full border border-border/50 bg-foreground/[0.02] px-3 py-1.5 text-foreground/75 transition-colors hover:border-aurora/40 hover:text-aurora"
+            aria-label="Return to home"
+          >
+            <Home className="size-3.5" />
+            <span className="tracking-[0.22em]">Home</span>
+          </button>
+        )}
         <div className="flex items-center gap-2">
           <span className="size-1.5 rounded-full bg-aurora animate-breathe" />
           <span className="font-mono text-foreground/80">AURA · OS 4.2</span>
