@@ -25,7 +25,7 @@ const DEGRADING_DURATION = 3400;  // sensor uncertainty rising
 const COUNTDOWN_START = 10;       // handoff seconds
 const COUNTDOWN_TICK = 1000;
 
-export function TakeoverPhase() {
+export function TakeoverPhase({ onHome }: { onHome?: () => void } = {}) {
   const [stage, setStage] = useState<Stage>("auto");
   const [seconds, setSeconds] = useState(COUNTDOWN_START);
   const [paused, setPaused] = useState(false);
@@ -97,7 +97,7 @@ export function TakeoverPhase() {
 
   return (
     <div className="flex h-full flex-col">
-      <ChromeShell phaseLabel={chromeLabel[stage]} rightStatus={chromeStatus[stage]} />
+      <ChromeShell phaseLabel={chromeLabel[stage]} rightStatus={chromeStatus[stage]} onHome={onHome} />
 
       <ModeBar mode={mode} confidence={confidence} hint={modeHint} />
 

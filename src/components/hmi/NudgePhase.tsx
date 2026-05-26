@@ -26,7 +26,7 @@ const HANDOVER_STEPS = [
   { label: "I have control", hint: "You can supervise" },
 ];
 
-export function NudgePhase() {
+export function NudgePhase({ onHome }: { onHome?: () => void } = {}) {
   const [mode, setMode] = useState<Mode>("suggesting");
   const [handoverStep, setHandoverStep] = useState(0);
 
@@ -78,7 +78,7 @@ export function NudgePhase() {
         transition={{ duration: 2.2, ease: "easeInOut" }}
       />
 
-      <ChromeShell phaseLabel={phaseLabel} rightStatus={rightStatus} />
+      <ChromeShell phaseLabel={phaseLabel} rightStatus={rightStatus} onHome={onHome} />
 
       {/* Driving-mode banner — always present, instantly readable */}
       <ModeBar

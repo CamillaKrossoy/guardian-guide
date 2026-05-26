@@ -30,7 +30,7 @@ const STAY_PLAN: PlanStep[] = [
   { t: "+30s", title: "Re-evaluate overtake", detail: "If a clean gap opens",  at: 30 },
 ];
 
-export function LogicPhase() {
+export function LogicPhase({ onHome }: { onHome?: () => void } = {}) {
   const [decision, setDecision] = useState<Decision>("pending");
   const [elapsed, setElapsed] = useState(0);
 
@@ -78,7 +78,7 @@ export function LogicPhase() {
 
   return (
     <div className="flex h-full flex-col">
-      <ChromeShell phaseLabel="Phase 03 · Autonomous · Level 3" rightStatus="In control" />
+      <ChromeShell phaseLabel="Phase 03 · Autonomous · Level 3" rightStatus="In control" onHome={onHome} />
 
       <ModeBar
         mode="autonomous"
